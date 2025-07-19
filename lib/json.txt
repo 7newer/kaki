@@ -1,0 +1,16 @@
+{
+  "user_name": "Jane Doe",
+  "age": 32,
+  "address": {
+    "city": "Busan",
+    "street": "Haeundae"
+  },
+  "items_purchased": [
+    { "item_name": "book", "price": 15000 },
+    null,
+    { "item_name": null, "price": 30000 },
+    { "item_name": "keyboard", "price": "invalid_price" },
+    { "item_name": "mouse" }
+  ]
+}
+
