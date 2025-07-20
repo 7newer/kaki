@@ -1,4 +1,5 @@
 import 'package:review01/jsonholder_practice/core/response.dart';
+import 'package:review01/jsonholder_practice/dto/post_dto.dart';
 
 abstract interface class PostDataSource {
   // 모든 글 가져오기
@@ -16,11 +17,13 @@ abstract interface class PostDataSource {
   });
 
   // 글 수정하기
-  Future<Response<Map<String, dynamic>>> updatePost(
-    int id,
-    Map<String, dynamic> user,
-  );
+  Future<Response<Map<String, dynamic>>> updatePost(int id, PostDto patchData);
 
   // 글 삭제하기
-  Future<Response<Map<String, dynamic>>> deletePost(int id);
+  Future<Response<void>> deletePost(int id);
+
+  Future<Response<Map<String, dynamic>>> patchPost(
+    int id,
+    Map<String, dynamic> post,
+  );
 }

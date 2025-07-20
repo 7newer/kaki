@@ -1,8 +1,13 @@
+/*
+* Response<T>의 형태의 종속성을 가지고 있는 클래스
+* */
+
 import 'dart:convert';
 
 import 'package:review01/jsonholder_practice/core/response.dart';
 import 'package:review01/jsonholder_practice/data_source/remote/post_data_source.dart';
 import 'package:http/http.dart' as http;
+import 'package:review01/jsonholder_practice/dto/post_dto.dart';
 
 class PostDataSourceImpl implements PostDataSource {
   final _baseUrl = 'https://jsonplaceholder.typicode.com';
@@ -18,15 +23,25 @@ class PostDataSourceImpl implements PostDataSource {
   }
 
   @override
-  Future<Response<Map<String, dynamic>>> deletePost(int id) {
-    // TODO: implement deletePost
-    throw UnimplementedError();
+  Future<Response<void>> deletePost(int id) async {
+    final response = await http.delete(Uri.parse('$_baseUrl/posts/$id'));
+
+    return Response(
+      statusCode: response.statusCode,
+      header: response.headers,
+      body: null,
+    );
   }
 
   @override
-  Future<Response<Map<String, dynamic>>> getPost(int id) {
-    // TODO: implement getPost
-    throw UnimplementedError();
+  Future<Response<Map<String, dynamic>>> getPost(int id) async {
+    final response = await http.get(Uri.parse('$_baseUrl/posts/$id'));
+
+    return Response(
+      statusCode: response.statusCode,
+      header: response.headers,
+      body: jsonDecode(response.body),
+    );
   }
 
   @override
@@ -38,7 +53,7 @@ class PostDataSourceImpl implements PostDataSource {
     // 응답 body를 json으로 파싱하고 List<Map<String, dynamic>>로 변환
     final jsonList = jsonDecode(response.body) as List;
     // jsonList를 Map<String, dynamic>으로 변환
-    // 최소한으로 다룰 수 있는 기본 구조(Map, List)**로 만드는 1차 가공까지를 책임
+    // 최소한으로 다룰 수 있는 기본 구조(Map, List)로 만드는 1차 가공까지를 책임
     final posts = jsonList.map((json) => json as Map<String, dynamic>).toList();
     // Response 객체 생성
     return Response(
@@ -49,11 +64,36 @@ class PostDataSourceImpl implements PostDataSource {
   }
 
   @override
-  Future<Response<Map<String, dynamic>>> updatePost(
+  Future<Response<Map<String, dynamic>>> updatePost(int id, PostDto post) async {
+    final response = await http.put(
+      Uri.parse('$_baseUrl/posts/$id'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(post.toJson()),
+    );
+
+    return Response(
+      statusCode: response.statusCode,
+      header: response.headers,
+      body: jsonDecode(response.body),
+    );
+  }
+
+  @override
+  Future<Response<Map<String, dynamic>>> patchPost(
     int id,
-    Map<String, dynamic> user,
-  ) {
-    // TODO: implement updatePost
-    throw UnimplementedError();
+    Map<String, dynamic> patchData,
+  ) async {
+    // patch 요청 보내기
+    final response = await http.patch(
+      Uri.parse('$_baseUrl/posts/$id'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(patchData),
+    );
+
+    return Response(
+      statusCode: response.statusCode,
+      header: response.headers,
+      body: jsonDecode(response.body),
+    );
   }
 }
