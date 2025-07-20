@@ -1,4 +1,4 @@
-import 'package:review01/model/user.dart';
+import 'package:review01/practice1/model/user.dart';
 
 abstract class UserRepository{
   Future<User> getUser();

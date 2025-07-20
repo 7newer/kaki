@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   freezed: ^3.2.0
   freezed_annotation: ^3.1.0
+  http: ^1.2.1 # http 패키지 추가
 
 dev_dependencies:
   build_runner: ^2.5.4
@@ -91,3 +92,4 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+

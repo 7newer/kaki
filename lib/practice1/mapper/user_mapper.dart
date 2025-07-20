@@ -1,4 +1,4 @@
-import 'package:review01/dto/user_dto.dart';
+import 'package:review01/practice1/dto/user_dto.dart';
 
 import '../model/item.dart';
 import '../model/user.dart';

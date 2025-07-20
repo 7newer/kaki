@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:review01/mapper/user_mapper.dart';
-import 'package:review01/model/user.dart';
-import 'package:review01/repository/user_repository.dart';
+import 'package:review01/practice1/mapper/user_mapper.dart';
+import 'package:review01/practice1/model/user.dart';
+import 'package:review01/practice1/repository/user_repository.dart';
 
 import '../dto/user_dto.dart';
 
