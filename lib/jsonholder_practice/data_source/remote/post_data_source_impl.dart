@@ -1,5 +1,7 @@
 /*
 * Response<T>의 형태의 종속성을 가지고 있는 클래스
+* Repository는 데이터가 어디서 오는지(API, DB, 파일 등) 몰라야 하기때문에 body를 jsonDeocode로 변환
+* - 즉 Dart에서 바로 쓸수 있는 기본객체(Map,List)로 변환이 목적
 * */
 
 import 'dart:convert';
@@ -17,14 +19,27 @@ class PostDataSourceImpl implements PostDataSource {
     required String title,
     required String body,
     required int userId,
-  }) {
-    // TODO: implement createPost
-    throw UnimplementedError();
+  }) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/posts'),
+      headers: {'Content-Type': 'application/json; charset-UTF-8'},
+      body: jsonEncode({'title': title, 'body': body, 'userId': userId}),
+    );
+
+    return Response(
+      statusCode: response.statusCode,
+      header: response.headers,
+      body: jsonDecode(response.body),
+    );
   }
 
   @override
   Future<Response<void>> deletePost(int id) async {
     final response = await http.delete(Uri.parse('$_baseUrl/posts/$id'));
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to delete post');
+    }
 
     return Response(
       statusCode: response.statusCode,
@@ -64,7 +79,10 @@ class PostDataSourceImpl implements PostDataSource {
   }
 
   @override
-  Future<Response<Map<String, dynamic>>> updatePost(int id, PostDto post) async {
+  Future<Response<Map<String, dynamic>>> updatePost(
+    int id,
+    PostDto post,
+  ) async {
     final response = await http.put(
       Uri.parse('$_baseUrl/posts/$id'),
       headers: {'Content-Type': 'application/json'},
