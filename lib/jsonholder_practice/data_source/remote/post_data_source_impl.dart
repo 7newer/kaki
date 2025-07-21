@@ -26,7 +26,7 @@ class PostDataSourceImpl implements PostDataSource {
     required String body,
     required int userId,
   }) async {
-    final response = await http.post(
+    final response = await _client.post(
       Uri.parse('$_baseUrl/posts'),
       headers: {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode({'title': title, 'body': body, 'userId': userId}),
@@ -41,7 +41,7 @@ class PostDataSourceImpl implements PostDataSource {
 
   @override
   Future<Response<void>> deletePost(int id) async {
-    final response = await http.delete(Uri.parse('$_baseUrl/posts/$id'));
+    final response = await _client.delete(Uri.parse('$_baseUrl/posts/$id'));
 
     if (response.statusCode != 200) {
       throw Exception('Failed to delete post');
@@ -56,7 +56,7 @@ class PostDataSourceImpl implements PostDataSource {
 
   @override
   Future<Response<Map<String, dynamic>>> getPost(int id) async {
-    final response = await http.get(Uri.parse('$_baseUrl/posts/$id'));
+    final response = await _client.get(Uri.parse('$_baseUrl/posts/$id'));
 
     return Response(
       statusCode: response.statusCode,
@@ -69,7 +69,7 @@ class PostDataSourceImpl implements PostDataSource {
   Future<Response<List<Map<String, dynamic>>>> getPosts() async {
     // http.get 요청 보내고 응답 받기
     final url = Uri.parse('$_baseUrl/posts');
-    final response = await http.get(url);
+    final response = await _client.get(url);
 
     // 응답 body를 json으로 파싱하고 List<Map<String, dynamic>>로 변환
     final jsonList = jsonDecode(response.body) as List;
@@ -89,7 +89,7 @@ class PostDataSourceImpl implements PostDataSource {
     int id,
     PostDto post,
   ) async {
-    final response = await http.put(
+    final response = await _client.put(
       Uri.parse('$_baseUrl/posts/$id'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(post.toJson()),
@@ -108,7 +108,7 @@ class PostDataSourceImpl implements PostDataSource {
     Map<String, dynamic> patchData,
   ) async {
     // patch 요청 보내기
-    final response = await http.patch(
+    final response = await _client.patch(
       Uri.parse('$_baseUrl/posts/$id'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(patchData),
