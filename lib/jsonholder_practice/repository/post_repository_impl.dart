@@ -10,6 +10,7 @@ class PostRepositoryImpl implements PostRepository {
 
   // 생성자 주입
   PostRepositoryImpl(this._dataSource);
+
   //PostRepositoryImpl(PostDataSource dataSource) : _dataSource = dataSource;
 
   @override
@@ -41,9 +42,11 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   @override
-  Future<List<Post>> getPosts() async{
-    final reponse = await _dataSource.getPosts();
-    return reponse.body.map((json) => PostDto.fromJson(json).toPost()).toList();
+  Future<List<Post>> getPosts() async {
+    final response = await _dataSource.getPosts();
+    return response.body
+        .map((json) => PostDto.fromJson(json).toPost())
+        .toList();
   }
 
   @override
@@ -63,5 +66,25 @@ class PostRepositoryImpl implements PostRepository {
 
     final response = await _dataSource.updatePost(id, postDto);
     return PostDto.fromJson(response.body).toPost();
+  }
+
+  @override
+  Future<List<Post>> getPostsByKeyword(String keyword) async {
+    final response = await _dataSource.getPosts();
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch posts');
+    }
+
+    // mapper사용해서 Dto model 리스트로 변환
+    final posts = response.body
+        .map((e) => PostDto.fromJson(e).toPost())
+        .toList();
+
+    return posts
+        .where(
+          (post) => post.title.toLowerCase().contains(keyword.toLowerCase()),
+        )
+        .toList();
   }
 }

@@ -8,4 +8,5 @@ abstract interface class PostRepository{
   Future<void> deletePost(int id);
   // 수정데이터만 map형태로
   Future<Post> patchPost(int id, Map<String, dynamic> data);
+  Future<List<Post>> getPostsByKeyword(String keyword);
 }
