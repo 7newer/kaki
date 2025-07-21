@@ -12,7 +12,8 @@ import 'package:http/http.dart' as http;
 import 'package:review01/jsonholder_practice/dto/post_dto.dart';
 
 class PostDataSourceImpl implements PostDataSource {
-  final _baseUrl = 'https://jsonplaceholder.typicode.com';
+  final _baseUrl = 'http://jsonplaceholder.typicode.com';
+  // jsonplaceholder.typicode.com의 https- 신분증(SSL 인증서)을 제대로 확인하지 못해서 연결을 거부하고, 그 결과로 HTML 에러 페이지
 
   @override
   Future<Response<Map<String, dynamic>>> createPost({
@@ -22,7 +23,7 @@ class PostDataSourceImpl implements PostDataSource {
   }) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/posts'),
-      headers: {'Content-Type': 'application/json; charset-UTF-8'},
+      headers: {'Content-Type': 'application/json; charset=UTF-8'},
       body: jsonEncode({'title': title, 'body': body, 'userId': userId}),
     );
 

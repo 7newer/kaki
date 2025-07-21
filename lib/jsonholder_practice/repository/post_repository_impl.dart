@@ -1,4 +1,3 @@
-import 'package:review01/jsonholder_practice/core/response.dart';
 import 'package:review01/jsonholder_practice/dto/post_dto.dart';
 import 'package:review01/jsonholder_practice/mapper/post_mapper.dart';
 import 'package:review01/jsonholder_practice/model/post.dart';
@@ -11,6 +10,7 @@ class PostRepositoryImpl implements PostRepository {
 
   // 생성자 주입
   PostRepositoryImpl(this._dataSource);
+  //PostRepositoryImpl(PostDataSource dataSource) : _dataSource = dataSource;
 
   @override
   Future<Post> createPost(Post post) async {
@@ -24,7 +24,7 @@ class PostRepositoryImpl implements PostRepository {
     final response = await _dataSource.createPost(
       title: postDto.title ?? '',
       body: postDto.body ?? '',
-      userId: postDto.userId as int ?? 0,
+      userId: (postDto.userId ?? 0).toInt(),
     );
     return PostDto.fromJson(response.body).toPost();
   }
